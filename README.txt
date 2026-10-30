@@ -12,19 +12,11 @@ config.php             MySQL connection settings (small PHP backend)
 api/index.php          Login, registration, permissions and database operations (PHP)
 database.sql           Tables and demo room/student/fee/request data (MySQL)
 
-SETUP ON WINDOWS WITH XAMPP
----------------------------
-1. Extract this ZIP file.
-2. Copy the folder named HostelHub_HTML_Project into C:\xampp\htdocs\
-3. Open XAMPP Control Panel and click Start next to Apache and MySQL.
-4. Visit http://localhost/phpmyadmin/
-5. Click Import, choose this project's database.sql, and click Import/Go.
-6. The SQL script creates a new database named hostelhub_student_portal, so it will not overwrite your earlier demo database. If your MySQL root account has a password, open config.php and set DB_PASS to it. The default XAMPP setup often uses an empty password.
-7. Open http://localhost/HostelHub_HTML_Project/
+
 
 DEMO ADMIN LOGIN
 ----------------
-Email: admin@hostelhub.local
+Email: aqsarazaq12@gmail.com
 Password: Admin@123
 This is a demonstration password. Do not use it for a public/real deployment.
 
