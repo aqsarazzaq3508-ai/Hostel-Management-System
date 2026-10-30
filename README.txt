@@ -11,7 +11,13 @@ assets/app.js          Interactions, forms and API requests (JavaScript)
 config.php             MySQL connection settings (small PHP backend)
 api/index.php          Login, registration, permissions and database operations (PHP)
 database.sql           Tables and demo room/student/fee/request data (MySQL)
-
+Ma'am, to check my project:
+1:Open XAMPP > Start Apache + MySQL
+2:Open http://localhost/phpmyadmin/ > Import my  database.sql
+after copy all code to visual studio after it name folder Hostel-Management-System
+3:Then open http://localhost/Hostel-Management-System/
+4:Login: admin / password
+5:login/register student
 
 
 DEMO ADMIN LOGIN
