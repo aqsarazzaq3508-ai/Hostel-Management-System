@@ -36,7 +36,3 @@ ADMIN USE
 - Log in with the demo admin credentials above.
 - Review students and room requests, approve/decline requests, assign fee records, mark fees paid for demo tracking, and resolve complaints.
 - To assign a fee, open Fee Records and choose Add fee.
-
-IMPORTANT
----------
-This is a learning/demo project, not a production-ready system. The fee status feature does not collect real payments. Change the demo admin password and apply a stronger security review before any public deployment. The project files were syntax-checked, but you should test them on your own XAMPP setup.
