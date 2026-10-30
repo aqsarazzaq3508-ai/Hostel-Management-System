@@ -1,0 +1,898 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HostelHub | Hostel Management System</title>
+  <meta name="description" content="HostelHub student and hostel administration portal.">
+
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/app.js" defer></script>
+</head>
+
+<body>
+
+  <!-- ==================== LOGIN & REGISTRATION ==================== -->
+  <section id="authScreen" class="auth-screen">
+
+    <div class="auth-brand">
+      <img src="assets/logo.png.jpeg" alt="HostelHub logo" class="brand-logo">
+      <div>
+        <b>HostelHub</b>
+        <small>HOSTEL MANAGEMENT SYSTEM</small>
+      </div>
+    </div>
+
+    <div class="auth-card">
+      <div class="eyebrow">WELCOME TO HOSTELHUB</div>
+      <h1 id="authTitle">Student login</h1>
+      <p id="authSubtitle">
+        Sign in to manage your hostel room, fees and complaints.
+      </p>
+
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-auth-mode="login">
+          Login
+        </button>
+        <button type="button" class="auth-tab" data-auth-mode="register">
+          Student registration
+        </button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <label>
+          Email address
+          <input name="email" type="email" required
+                 autocomplete="username" placeholder="you@example.com">
+        </label>
+
+        <label>
+          Password
+          <input name="password" type="password" required
+                 autocomplete="current-password"
+                 placeholder="Enter your password">
+        </label>
+
+        <button class="primary-btn full-btn" type="submit">
+          Login to portal
+        </button>
+
+        <div class="auth-error" id="loginError" role="alert"></div>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <label>
+          Full name
+          <input name="name" required maxlength="100"
+                 autocomplete="name" placeholder="Your full name">
+        </label>
+
+        <label>
+          Email address
+          <input name="email" type="email" required
+                 autocomplete="email" placeholder="you@example.com">
+        </label>
+
+        <label>
+          Phone number
+          <input name="phone" maxlength="30"
+                 autocomplete="tel" placeholder="03xx-xxxxxxx">
+        </label>
+
+        <label>
+          Create password
+          <input name="password" type="password" required minlength="8"
+                 autocomplete="new-password"
+                 placeholder="At least 8 characters">
+        </label>
+
+        <button class="primary-btn full-btn" type="submit">
+          Create student account
+        </button>
+
+        <div class="auth-error" id="registerError" role="alert"></div>
+      </form>
+
+      <div class="auth-foot">
+        Student portal · HTML · CSS · JavaScript · PHP · MySQL
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==================== MAIN APPLICATION ==================== -->
+  <div class="app-shell hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+
+      <a class="brand" href="#dashboard">
+        <img src="assets/logo.png.jpeg" alt="HostelHub logo" class="brand-logo">
+        <span>
+          <b>HostelHub</b>
+          <small>MANAGEMENT PORTAL</small>
+        </span>
+      </a>
+
+      <div class="nav-label">WORKSPACE</div>
+
+      <!-- Student navigation -->
+      <nav class="nav-menu student-nav hidden"
+           id="studentNav" aria-label="Student navigation">
+
+        <button class="nav-link active" data-page="student-home">
+          ▦ My dashboard
+        </button>
+
+        <button class="nav-link" data-page="rooms">
+          ▤ Browse rooms
+        </button>
+
+        <button class="nav-link" data-page="requests">
+          ⇄ My room requests
+        </button>
+
+        <button class="nav-link" data-page="fees">
+          ＄ My fees
+        </button>
+
+        <button class="nav-link" data-page="complaints">
+          ☷ My complaints
+        </button>
+      </nav>
+
+      <!-- Administrator navigation -->
+      <nav class="nav-menu" id="adminNav"
+           aria-label="Administrator navigation">
+
+        <button class="nav-link active" data-page="dashboard">
+          <span>▦</span> Dashboard
+        </button>
+
+        <button class="nav-link" data-page="rooms">
+          <span>▤</span> Rooms
+          <em id="roomNavCount">—</em>
+        </button>
+
+        <button class="nav-link" data-page="students">
+          <span>♙</span> Students
+        </button>
+
+        <button class="nav-link" data-page="requests">
+          <span>⇄</span> Room Requests
+          <em class="nav-alert" id="requestNavCount">0</em>
+        </button>
+
+        <button class="nav-link" data-page="fees">
+          <span>＄</span> Fee Records
+        </button>
+
+        <button class="nav-link" data-page="complaints">
+          <span>☷</span> Complaints
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <div class="help-card">
+          <div class="help-icon">✦</div>
+          <b>Need a hand?</b>
+          <p>Manage hostel operations from one simple workspace.</p>
+          <span>HOSTELHUB • STUDENT PROJECT</span>
+        </div>
+
+        <div class="profile">
+          <div class="avatar" id="sideAvatar">AD</div>
+          <div>
+            <b id="sideUserName">Hostel Admin</b>
+            <small id="sideUserRole">Administrator</small>
+          </div>
+          <span class="online-dot"></span>
+        </div>
+
+      </div>
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-area">
+
+      <!-- TOP BAR -->
+      <header class="topbar">
+
+        <button class="mobile-menu" id="mobileMenu"
+                type="button" aria-label="Toggle navigation">
+          ☰
+        </button>
+
+        <div class="crumb">
+          <span>Workspace</span>
+          <b>/</b>
+          <strong id="pageCrumb">Dashboard</strong>
+        </div>
+
+        <div class="top-actions">
+          <span class="status-pill">
+            <i></i> Local system
+          </span>
+
+          <button class="icon-btn" id="refreshBtn"
+                  type="button" title="Refresh data">
+            ↻
+          </button>
+
+          <div class="top-avatar" id="topAvatar">AD</div>
+
+          <span id="currentUserName" class="current-user-name">
+            Admin
+          </span>
+
+          <button class="secondary-btn logout-btn"
+                  id="logoutBtn" type="button">
+            Log out
+          </button>
+        </div>
+      </header>
+
+
+      <div class="page-content">
+
+        <!-- ==================== STUDENT DASHBOARD ==================== -->
+        <section class="page-view" id="page-student-home">
+
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">STUDENT PORTAL</div>
+              <h1 id="studentWelcome">Welcome back</h1>
+              <p>Manage your room request, fee records and hostel support.</p>
+            </div>
+
+            <button class="primary-btn" data-go="rooms">
+              ＋ Request a room
+            </button>
+          </div>
+
+          <div class="stats-grid student-stats">
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>My room</span>
+                <span class="stat-icon blue">▤</span>
+              </div>
+              <strong id="myRoomNumber">—</strong>
+              <div class="stat-foot" id="myRoomType">
+                No room allocated yet
+              </div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Room requests</span>
+                <span class="stat-icon amber">⇄</span>
+              </div>
+              <strong id="myRequestCount">0</strong>
+              <div class="stat-foot">Submitted requests</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Pending fees</span>
+                <span class="stat-icon green">＄</span>
+              </div>
+              <strong id="myPendingFees">0</strong>
+              <div class="stat-foot">Fees awaiting payment</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>My complaints</span>
+                <span class="stat-icon violet">☷</span>
+              </div>
+              <strong id="myComplaintCount">0</strong>
+              <div class="stat-foot">Submitted support requests</div>
+            </article>
+
+          </div>
+
+          <div class="content-grid">
+
+            <section class="panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>My latest room requests</h2>
+                  <p>Track your room allocation status</p>
+                </div>
+                <button class="text-btn" data-go="requests">
+                  View all →
+                </button>
+              </div>
+
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ROOM</th>
+                      <th>DATE</th>
+                      <th>STATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="myRecentRequests"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Quick actions</h2>
+                  <p>Manage your hostel stay</p>
+                </div>
+              </div>
+
+              <div class="quick-actions">
+
+                <button data-go="rooms">
+                  <span class="quick-icon blue">▤</span>
+                  <span>
+                    <b>Browse rooms</b>
+                    <small>Check room availability and request a room</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+                <button data-go="fees">
+                  <span class="quick-icon green">＄</span>
+                  <span>
+                    <b>View my fees</b>
+                    <small>Review monthly fee status</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+                <button data-go="complaints">
+                  <span class="quick-icon violet">☷</span>
+                  <span>
+                    <b>Submit a complaint</b>
+                    <small>Report a hostel issue</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+              </div>
+            </section>
+          </div>
+        </section>
+
+
+        <!-- ==================== ADMIN DASHBOARD ==================== -->
+        <section class="page-view active" id="page-dashboard">
+
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">HOSTEL OPERATIONS</div>
+              <h1>Good day, Admin <span>✦</span></h1>
+              <p>Here’s what’s happening at your hostel today.</p>
+            </div>
+
+            <button class="primary-btn" data-go="rooms">
+              ＋ Manage rooms
+            </button>
+          </div>
+
+          <!-- NEW: HOSTEL PHOTO BANNER -->
+          <section class="dashboard-hero">
+
+            <div class="dashboard-hero-content">
+              <span class="hero-tag">YOUR HOSTEL, ORGANIZED</span>
+
+              <h2>Smart Living Starts Here</h2>
+
+              <p>
+                Manage rooms, students, fee records and complaints
+                in one convenient workspace.
+              </p>
+
+              <button class="primary-btn" data-go="rooms">
+                Explore Rooms →
+              </button>
+            </div>
+
+            <div class="dashboard-hero-image">
+              <img
+                src="assets/hostel-dashboard.jpg.jpeg"
+                alt="Modern university hostel building"
+                loading="eager"
+              >
+            </div>
+
+          </section>
+          <!-- END NEW BANNER -->
+
+
+          <!-- ADMIN STATISTICS -->
+          <div class="stats-grid">
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Total students</span>
+                <span class="stat-icon blue">♙</span>
+              </div>
+              <strong id="statStudents">—</strong>
+              <div class="stat-foot">Registered residents</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Available rooms</span>
+                <span class="stat-icon green">▤</span>
+              </div>
+              <strong id="statAvailable">—</strong>
+              <div class="stat-foot">Ready for allocation</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Pending requests</span>
+                <span class="stat-icon amber">⇄</span>
+              </div>
+              <strong id="statRequests">—</strong>
+              <div class="stat-foot">Awaiting review</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Open complaints</span>
+                <span class="stat-icon violet">☷</span>
+              </div>
+              <strong id="statComplaints">—</strong>
+              <div class="stat-foot">Need attention</div>
+            </article>
+
+          </div>
+
+
+          <!-- ROOM OVERVIEW AND QUICK ACTIONS -->
+          <div class="content-grid">
+
+            <section class="panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Room overview</h2>
+                  <p>Availability across your hostel</p>
+                </div>
+                <button class="text-btn" data-go="rooms">
+                  View all rooms →
+                </button>
+              </div>
+
+              <div id="dashboardRooms" class="room-overview">
+                <div class="loading">Loading rooms…</div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Quick actions</h2>
+                  <p>Common management tasks</p>
+                </div>
+              </div>
+
+              <div class="quick-actions">
+
+                <button data-go="students">
+                  <span class="quick-icon blue">♙</span>
+                  <span>
+                    <b>View students</b>
+                    <small>Browse resident records</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+                <button data-go="requests">
+                  <span class="quick-icon amber">⇄</span>
+                  <span>
+                    <b>Review room requests</b>
+                    <small>Approve or decline requests</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+                <button data-go="fees">
+                  <span class="quick-icon green">＄</span>
+                  <span>
+                    <b>Manage fee records</b>
+                    <small>Check payment status</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+                <button data-go="complaints">
+                  <span class="quick-icon violet">☷</span>
+                  <span>
+                    <b>Resolve complaints</b>
+                    <small>Follow up on issues</small>
+                  </span>
+                  <i>→</i>
+                </button>
+
+              </div>
+            </section>
+          </div>
+
+
+          <!-- RECENT REQUESTS -->
+          <section class="panel recent-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Recent room requests</h2>
+                <p>Latest student requests submitted</p>
+              </div>
+              <button class="text-btn" data-go="requests">
+                See requests →
+              </button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>STUDENT</th>
+                    <th>ROOM</th>
+                    <th>DATE</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+
+                <tbody id="recentRequests">
+                  <tr>
+                    <td colspan="4" class="empty-cell">
+                      Loading records…
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+
+        <!-- ==================== ROOM MANAGEMENT ==================== -->
+        <section class="page-view" id="page-rooms">
+
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">ACCOMMODATION</div>
+              <h1>Room management</h1>
+              <p>View room capacity and availability.</p>
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <div class="search-box">
+              <span>⌕</span>
+              <input id="roomSearch"
+                     placeholder="Search by room number or type…">
+            </div>
+
+            <select id="roomFilter">
+              <option value="all">All room status</option>
+              <option value="Available">Available</option>
+              <option value="Full">Full</option>
+            </select>
+          </div>
+
+          <div id="roomsGrid" class="rooms-grid"></div>
+        </section>
+
+
+        <!-- ==================== STUDENTS ==================== -->
+        <section class="page-view" id="page-students">
+
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">RESIDENT DIRECTORY</div>
+              <h1>Students</h1>
+              <p>Student records connected to your hostel database.</p>
+            </div>
+
+            <button class="primary-btn" id="addStudentBtn">
+              ＋ Add student
+            </button>
+          </div>
+
+          <div class="filter-row">
+            <div class="search-box">
+              <span>⌕</span>
+              <input id="studentSearch" placeholder="Search students…">
+            </div>
+          </div>
+
+          <section class="panel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>STUDENT</th>
+                    <th>EMAIL</th>
+                    <th>PHONE</th>
+                    <th>ROOM</th>
+                    <th>STATUS</th>
+                  </tr>
+                </thead>
+                <tbody id="studentsTable"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+
+        <!-- ==================== ROOM REQUESTS ==================== -->
+        <section class="page-view" id="page-requests">
+
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">ALLOCATION WORKFLOW</div>
+              <h1>Room requests</h1>
+              <p>Review requests and update their status.</p>
+            </div>
+          </div>
+
+          <section class="panel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>STUDENT</th>
+                    <th>ROOM</th>
+                    <th>REQUEST DATE</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="requestsTable"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+
+        <!-- ==================== FEES ==================== -->
+        <section class="page-view" id="page-fees">
+
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">PAYMENT TRACKING</div>
+              <h1 id="feesHeading">Fee records</h1>
+              <p id="feesDescription">
+                Track hostel fee payments and outstanding dues.
+              </p>
+            </div>
+
+            <button class="primary-btn" id="addFeeBtn">
+              ＋ Add fee
+            </button>
+          </div>
+
+          <section class="panel">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>STUDENT</th>
+                    <th>MONTH</th>
+                    <th>AMOUNT</th>
+                    <th>DUE DATE</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody id="feesTable"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+
+        <!-- ==================== COMPLAINTS ==================== -->
+        <section class="page-view" id="page-complaints">
+
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">STUDENT SUPPORT</div>
+              <h1>Complaints</h1>
+              <p>Track maintenance issues and student concerns.</p>
+            </div>
+
+            <button class="primary-btn" id="newComplaintBtn">
+              ＋ New complaint
+            </button>
+          </div>
+
+          <div id="complaintsList" class="complaints-list"></div>
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="footer">
+          <span>© 2026 HostelHub Management System</span>
+          <span>Built with HTML · CSS · JavaScript · PHP · MySQL</span>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+
+  <!-- ==================== ADD FEE DIALOG ==================== -->
+  <dialog id="feeDialog" class="modal">
+    <form id="feeForm">
+
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">PAYMENT TRACKING</div>
+          <h2>Add fee record</h2>
+        </div>
+        <button type="button" class="close-btn" data-close="feeDialog">
+          ×
+        </button>
+      </div>
+
+      <label>
+        Student
+        <select name="student_id" id="feeStudentSelect" required></select>
+      </label>
+
+      <label>
+        Month
+        <input name="month_label" required maxlength="30"
+               placeholder="November 2026">
+      </label>
+
+      <label>
+        Amount (Rs)
+        <input name="amount" type="number" min="1" step="0.01"
+               required placeholder="8500">
+      </label>
+
+      <label>
+        Due date
+        <input name="due_date" type="date" required>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn" data-close="feeDialog">
+          Cancel
+        </button>
+        <button class="primary-btn" type="submit">
+          Save fee record
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <!-- ==================== ROOM REQUEST DIALOG ==================== -->
+  <dialog id="roomRequestDialog" class="modal">
+    <form id="roomRequestForm">
+
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">ACCOMMODATION</div>
+          <h2>Request a room</h2>
+        </div>
+        <button type="button" class="close-btn"
+                data-close="roomRequestDialog">×</button>
+      </div>
+
+      <p id="requestRoomLabel">Select a room</p>
+
+      <input type="hidden" name="room_id">
+
+      <label>
+        Optional note
+        <input name="note" maxlength="250"
+               placeholder="Any additional information">
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn"
+                data-close="roomRequestDialog">Cancel</button>
+        <button class="primary-btn" type="submit">Submit request</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <!-- ==================== ADD STUDENT DIALOG ==================== -->
+  <dialog id="studentDialog" class="modal">
+    <form id="studentForm">
+
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">RESIDENT DIRECTORY</div>
+          <h2>Add student</h2>
+        </div>
+        <button type="button" class="close-btn"
+                data-close="studentDialog">×</button>
+      </div>
+
+      <label>
+        Full name
+        <input name="name" required maxlength="100"
+               placeholder="Student full name">
+      </label>
+
+      <label>
+        Email address
+        <input name="email" type="email" required
+               placeholder="student@example.com">
+      </label>
+
+      <label>
+        Phone number
+        <input name="phone" maxlength="30"
+               placeholder="03xx-xxxxxxx">
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn"
+                data-close="studentDialog">Cancel</button>
+        <button class="primary-btn" type="submit">Save student</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <!-- ==================== COMPLAINT DIALOG ==================== -->
+  <dialog id="complaintDialog" class="modal">
+    <form id="complaintForm">
+
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">STUDENT SUPPORT</div>
+          <h2>New complaint</h2>
+        </div>
+        <button type="button" class="close-btn"
+                data-close="complaintDialog">×</button>
+      </div>
+
+      <label id="complaintStudentLabel">
+        Student name
+        <input name="student_name" required maxlength="100"
+               placeholder="Student full name">
+      </label>
+
+      <label>
+        Complaint category
+        <select name="category">
+          <option>Maintenance</option>
+          <option>Cleanliness</option>
+          <option>Noise</option>
+          <option>Internet</option>
+          <option>Other</option>
+        </select>
+      </label>
+
+      <label>
+        Details
+        <textarea name="details" required maxlength="1000" rows="4"
+                  placeholder="Describe the issue…"></textarea>
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn"
+                data-close="complaintDialog">Cancel</button>
+        <button class="primary-btn" type="submit">Submit complaint</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <!-- APPLICATION NOTIFICATIONS -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>
